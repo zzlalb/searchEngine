@@ -19,7 +19,7 @@ public:
 
     void createIndex();
 
-    void storeDict(const std::string & filepath);             //write dict into filepath
+    void storeDict(const char* filepath);             //write dict into filepath
     void showFiles()const;                                    //for test
     void showDict()const;                                     //for test
 
@@ -28,7 +28,7 @@ private:
     void pushDict(const std::string& word);
 private:
     std::vector<std::string> _files;   //path of corpus
-    std::vector<std::pair<std::string,int>> _dict; //dictionary
+    std::map<std::string,int> _dict; //dictionary; string is word and int is frequency;
 
     SplitTool *_splitTool;                         //use jieba here
     std::map<std::string,std::set<int>> _index;    // index for dict
