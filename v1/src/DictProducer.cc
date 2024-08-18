@@ -4,13 +4,14 @@
 
 using std::cout;
 using std::string;
+using std::set;
 using std::ifstream;
 using std::ofstream;
 
 string cleanup_str(const string &word){
     string ret;
     for(auto & ele: word){
-        if(!ispunct(ele)){
+        if((!ispunct(ele))&&(!isdigit(ele))){
             ret+=tolower(ele);
         }
     }
@@ -35,6 +36,9 @@ DictProducer::DictProducer(const string &dir,SplitTool *splitTool)
 }
 
 void DictProducer::buildEnDict(){
+    Configuration* pInstance=Configuration::getInstance();
+    set<string> stopwords=pInstance->getStopWordList();
+
     for(auto & ele: _files){
         ifstream ifs;
         ifs.open(ele);
@@ -44,8 +48,20 @@ void DictProducer::buildEnDict(){
             while(ifs){
                 ifs>>word;
                 word=cleanup_str(word);
-                pushDict(word); 
+
+                if(stopwords.find(word)==stopwords.end()){
+                    pushDict(word);
+                }
+                 
             }
+
+            _dict.erase("");
+    
+            for(auto &ele: _dict){
+                _realdict.push_back(ele);
+            }
+
+            _dict.clear();
              
         }else{
             cout<<"open file error in DictProducer::buildEnDict\n";
@@ -54,7 +70,8 @@ void DictProducer::buildEnDict(){
         ifs.close();
     }
 
-    storeDict("../data/dict.dat");
+    
+    
 }
 
 void DictProducer::buildCnDict(){
@@ -72,7 +89,7 @@ void DictProducer::storeDict(const char* filepath){
         string key;
         int value;
 
-        for(auto & ele: _dict){
+        for(auto & ele: _realdict){
             key=ele.first;
             value=ele.second;
 
@@ -99,6 +116,9 @@ void DictProducer::pushDict(const string & word){
     }else{
         ++_dict[word];
     } 
+
+    
+    return;
 }
 
 

@@ -9,6 +9,8 @@ void test0(){
 
     dp.buildEnDict();
 
+    dp.storeDict("../data/dict.dat");
+
 }
 
 int main(int argc,char* argv[]){

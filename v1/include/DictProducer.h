@@ -30,6 +30,8 @@ private:
     std::vector<std::string> _files;   //path of corpus
     std::map<std::string,int> _dict; //dictionary; string is word and int is frequency;
 
+    std::vector<std::pair<std::string,int>> _realdict;
+
     SplitTool *_splitTool;                         //use jieba here
     std::map<std::string,std::set<int>> _index;    // index for dict
 };
