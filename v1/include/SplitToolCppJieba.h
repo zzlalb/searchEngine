@@ -7,10 +7,10 @@
 class SplitToolCppJieba : public SplitTool
 {
 public:
-    SplitToolCppJieba() {}
+    SplitToolCppJieba(){}
     virtual ~SplitToolCppJieba() {}
 
-    virtual std::vector<std::string> cut(const std::string & sentence)=0;
+    std::vector<std::string> cut(const std::string & sentence);
 
 private:
     Configuration * _pInstance;

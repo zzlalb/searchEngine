@@ -24,7 +24,7 @@ public:
     void showDict()const;                                     //for test
 
 private:
-    void getFiles();                                          //get absolute path
+    void getFiles();                                          //get absolute path(yet unused)
     void pushDict(const std::string& word);
 private:
     std::vector<std::string> _files;   //path of corpus

@@ -44,7 +44,18 @@ private:
             std::cout<<"In Configuration.h open stopList failed\n";
         }
 
+        std::ifstream ifs3("/home/zzl/searchEngine/v1/conf/stop_words_zh.txt");
+        if(ifs3.is_open()){
+            while(ifs3){
+                ifs3>>stopword;
+                _stopWordList.insert(stopword);
+            }
+        }else{
+            std::cout<<"In Configuration.h open stopList failed\n";
+        }
+
         ifs2.close();
+        ifs3.close();
     }
 
     ~Configuration() {}
