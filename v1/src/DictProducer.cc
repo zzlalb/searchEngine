@@ -167,6 +167,7 @@ void DictProducer::createIndex(){
     for(int i=0;i<26;++i){
         string alp;
         alp.push_back('a'+i);
+        //cout<<alp<<" ";
         _index[alp]=set<int>();
     }
 
@@ -178,6 +179,8 @@ void DictProducer::createIndex(){
             ifs1>>key;
             ifs1>>value;
 
+            //cout<<key<<" "<<value<<"\n";
+
             _realdict.push_back({key,value});
         }
         ifs1.close();
@@ -188,7 +191,7 @@ void DictProducer::createIndex(){
             int value;
             ifs2>>key;
             ifs2>>value;
-
+            //cout<<key<<" "<<value<<"\n";
             _realdict.push_back({key,value});
         }
         ifs2.close();
@@ -198,7 +201,9 @@ void DictProducer::createIndex(){
             for(int j=0;j<_realdict[i].first.size();){
                 int len=nBytesCode(_realdict[i].first[j]);
                 if(len==1){
-                    _index[std::to_string(_realdict[i].first[j])].insert(i);
+                    string tmp;
+                    tmp.push_back(_realdict[i].first[j]);
+                    _index[tmp].insert(i);
                     ++j;
                 }else{
                     string ch;
@@ -206,6 +211,7 @@ void DictProducer::createIndex(){
                         ch.push_back(_realdict[i].first[j+k]);
                     }
                     j+=len;
+                    _index[ch].insert(i);
                 }                
             }           
         }   
