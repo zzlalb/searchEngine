@@ -1,14 +1,13 @@
 #pragma once
 
 #include "WebPage.h"
-#include "SplitTool.h"
 #include "Configuration.h"
 #include <unordered_map>
 
 class PageLibPreprocessor
 {
 public:
-    PageLibPreprocessor(SplitTool* splitTool);
+    PageLibPreprocessor();
     ~PageLibPreprocessor() {}
 
     void doPreProcess();
@@ -21,9 +20,9 @@ private:
 
 private:
     Configuration* _pInstance;
-    SplitTool *_wordCutter;
     std::unordered_map<int,std::pair<int,int>> _offsetLib;
     std::unordered_map<std::string,std::vector<std::pair<int,double>>> _invertIndexLib;
+    std::vector<uint64_t> _vecOfHash;
 
 };
 

@@ -1,13 +1,11 @@
 #include <iostream>
 #include "../include/PageLibPreprocessor.h"
-#include "../include/SplitToolCppJieba.h"
 
 using std::cout;
 using std::endl;
 
 void test0(){
-    SplitToolCppJieba *jieba=new SplitToolCppJieba();
-    PageLibPreprocessor plp(jieba);
+    PageLibPreprocessor plp;
     plp.doPreProcess();
 }
 
