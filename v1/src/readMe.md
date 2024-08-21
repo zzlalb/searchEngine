@@ -5,4 +5,6 @@
 ### use g++ testCreateWebPageLib.cc Configuration.cc WebPage.cc tinyxml2.cc PageLibPreprocessor.cc -g
 
 
-##
+## to generate invertindexLib(invertIndex.dat)
+### all of web pages were cleaned
+### use g++ testCreateInvertIndex.cc Configuration.cc InvertIndexBuilder.cc -g

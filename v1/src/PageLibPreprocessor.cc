@@ -29,7 +29,7 @@ void PageLibPreprocessor::CreateWebPageLib(){
     for(auto & ele: _pInstance->getConfigMap()){
         if(regex_match(ele.second, pattern)){
             ofstream ofs;
-            ofs.open("../data/newripepage.dat",std::ios_base::app);
+            ofs.open("/home/zzl/searchEngine/v1/data/newripepage.dat",std::ios_base::app);
 
             WebPage pg(ele.second,id,pos,_offsetLib,_vecOfHash,simhasher);
             ofs<<pg.getDoc();
@@ -42,14 +42,11 @@ void PageLibPreprocessor::CreateWebPageLib(){
 
 }
 
-void PageLibPreprocessor::cutRedundantPages(){
-    //unused
-}
 
 void PageLibPreprocessor::storeOnDisk(){
         //create offsetlib
     ofstream ofs;
-    ofs.open("../data/newoffset.dat",std::ios_base::app);
+    ofs.open("/home/zzl/searchEngine/v1/data/newoffset.dat",std::ios_base::app);
 
     for(auto &ele:_offsetLib){
         ofs<<ele.first<<" "<<ele.second.first<<" "<<ele.second.second<<"\n";
@@ -59,9 +56,6 @@ void PageLibPreprocessor::storeOnDisk(){
     ofs.clear();
 }
 
-void PageLibPreprocessor::buildInvertIndexMap(){
-
-}
 
 void PageLibPreprocessor::doPreProcess(){
     CreateWebPageLib();

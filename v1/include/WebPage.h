@@ -21,8 +21,6 @@ public:
     std::string getDoc();
     std::map<std::string,int>& getWordsMap();
 
-    friend bool operator==(const WebPage & lhs,const WebPage & rhs);
-    friend bool operator<(const WebPage &lhs,const WebPage & rhs);
 
 private:
     void processDoc(const std::string &doc);
