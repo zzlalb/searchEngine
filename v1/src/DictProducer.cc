@@ -1,5 +1,6 @@
 #include "../include/DictProducer.h"
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <regex>
 #include <vector>
@@ -10,6 +11,7 @@ using std::set;
 using std::vector;
 using std::ifstream;
 using std::ofstream;
+using std::istringstream;
 using std::regex;
 
 string cleanup_str(const string &word){
@@ -174,10 +176,11 @@ void DictProducer::createIndex(){
     if(ifs1.is_open()&&ifs2.is_open()){
         string line;
         while (getline(ifs1, line)){
+            istringstream iss(line);
             string key;
             int value;
-            ifs1>>key;
-            ifs1>>value;
+            iss>>key;
+            iss>>value;
 
             //cout<<key<<" "<<value<<"\n";
 
@@ -187,10 +190,11 @@ void DictProducer::createIndex(){
         ifs1.clear();
 
         while (getline(ifs2, line)){
+            istringstream iss(line);
             string key;
             int value;
-            ifs2>>key;
-            ifs2>>value;
+            iss>>key;
+            iss>>value;
             //cout<<key<<" "<<value<<"\n";
             _realdict.push_back({key,value});
         }
