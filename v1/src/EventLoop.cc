@@ -3,7 +3,6 @@
 #include "../include/TcpConnection.h"
 #include <unistd.h>
 #include <sys/eventfd.h>
-
 #include <iostream>
 
 using std::cerr;
@@ -84,6 +83,7 @@ void EventLoop::waitEpollFd()
             }
             else if(fd == _evtfd)//用于通信的文件描述符就绪
             {
+                cout<<"here in EventLoop::waitEpollFd()\n";
                 handleRead();
                 //需要做"任务"
                 //遍历vector

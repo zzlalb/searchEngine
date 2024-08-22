@@ -18,4 +18,4 @@
 
 ## 
 ###
-### g++ Acceptor.cc InetAddress.cc TaskQueue.cc TestEchoServer.cc EchoServer.cc Socket.cc TcpConnection.cc ThreadPool.cc EventLoop.cc SocketIO.cc TcpServer.cc -g
+### g++ Acceptor.cc InetAddress.cc TaskQueue.cc TestEchoServer.cc EchoServer.cc Socket.cc TcpConnection.cc ThreadPool.cc EventLoop.cc SocketIO.cc TcpServer.cc Dictionary.cc singleJieba.cc -g

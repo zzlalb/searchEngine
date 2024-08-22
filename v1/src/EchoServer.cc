@@ -1,10 +1,23 @@
 #include "../include/EchoServer.h"
 #include "../include/EventLoop.h"
 #include "../include/TcpConnection.h"
+
+#include "../include/nlohmann/json.hpp"
+#include "../include/singleJieba.h"
+#include "../include/Dictionary.h"
+
+#include <vector>
+#include <map>
+#include <set>
+#include <string>
 #include <iostream>
 #include <functional>
 
 using std::cout;
+using std::vector;
+using std::string;
+using std::set;
+using std::map;
 using std::endl;
 using std::bind;
 
@@ -17,6 +30,29 @@ MyTask::MyTask(const string &msg, const TcpConnectionPtr &con)
 void MyTask::process()
 {
     //处理业务逻辑
+    Dictionary* pIns=Dictionary::getInstance();
+    vector<std::pair<string,int>> &dict=pIns->getDict();
+    map<string,set<int>> &index=pIns->getIndex();
+
+    set<std::pair<string,int>> rwSet;
+
+    vector<string> words;
+    singleJieba::getpInstance()->getjieba().Cut(_msg,words,true);
+
+    for(auto &ele:words){
+        for(auto & sets:index[ele]){
+            cout<<"running\n";
+            rwSet.insert(dict[sets]);
+        }
+    }
+
+    /*for test*/
+    for(auto &ele:rwSet){
+        cout<<ele.first<<" "<<ele.second<<"\n";
+    }
+
+
+
     _con->sendInLoop(_msg);
 }
 
