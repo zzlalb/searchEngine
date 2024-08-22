@@ -13,6 +13,9 @@
 ### use g++ testCreateInvertIndex.cc Configuration.cc InvertIndexBuilder.cc -g
 
 
+## To test Dictionary(single ton class)
+### use g++ testDictionary.cc Dictionary.cc
+
 ## 
 ###
 ### g++ Acceptor.cc InetAddress.cc TaskQueue.cc TestEchoServer.cc EchoServer.cc Socket.cc TcpConnection.cc ThreadPool.cc EventLoop.cc SocketIO.cc TcpServer.cc -g
