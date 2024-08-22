@@ -3,7 +3,6 @@
 #include "../include/TcpConnection.h"
 
 #include "../include/nlohmann/json.hpp"
-#include "../include/SplitToolCppJieba.h"
 #include "../include/Dictionary.h"
 #include "../include/msgDuer.h"
 
@@ -32,6 +31,15 @@ void MyTask::process()
     // 处理业务逻辑
     Dictionary *pIns = Dictionary::getInstance();
     msgDuer msgduer(_msg,pIns);
+    vector<string> rws=msgduer.getRecommandWords();
+
+    /*test no prob*/
+    // for(auto &ele:rws){
+    //     cout<<ele<<" ";
+    // }
+    // cout<<"\n";
+
+    
 
 
     _con->sendInLoop(_msg);

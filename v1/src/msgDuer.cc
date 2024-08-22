@@ -1,6 +1,7 @@
 #include "../include/msgDuer.h"
 
 using std::cout;
+using std::pair;
 using std::priority_queue;
 using std::map;
 using std::set;
@@ -37,22 +38,54 @@ void msgDuer::mergeSets(){
 }
 
 void msgDuer::buildComparer(){
-    
-}
-
-bool operator<(std::pair<int,int> &lhs,std::pair<int,int> &rhs){
-    if(editDistance(lhs.first,rhs.first)){
-
+    for(auto &ele:_rwSet){
+        _dictComparer[ele.first]={editDistance(_msg,ele.first),ele.second};
     }
+    /*test no prob*/
+    // for(auto &ele:_dictComparer){
+    //     cout<<"word: "<<ele.first<<"dis: "<<ele.second.first<<"fre "<<ele.second.second<<"\n";
+    // }
 }
+
+// bool operator<(pair<string,pair<int,int>> &lhs,pair<string,pair<int,int>> &rhs){
+//     if(lhs.second.first<rhs.second.first){
+//         return false;
+//     }else if(lhs.second.first==rhs.second.first){
+
+//         if(lhs.second.second<rhs.second.second){
+//             return false;
+//         }else if(lhs.second.second==rhs.second.second){
+//             return lhs.first.c_str()>rhs.first.c_str();
+//         }else{
+//             return true;
+//         }      
+
+//     }else{
+//         return true;
+//     }
+// }
 
 void msgDuer::fillPQueue(){
-
+    for(auto &ele:_dictComparer){
+        _pQueue.push({ele.first,{ele.second.first,ele.second.second}});
+    }
 }
 
 vector<string> msgDuer::getRecommandWords(){
     mergeSets();
+    buildComparer();
     fillPQueue();
+
+    vector<string> words;
+    int n=10;
+
+    while(!_pQueue.empty()&&n>0){
+        words.push_back(_pQueue.top().first);
+        _pQueue.pop();
+        --n;
+    }
+
+    return words;
 }
 
 size_t nBytesCode(const char ch){
