@@ -34,11 +34,11 @@ struct cmp{
 };
 
 
-class msgDuer
+class msgDealer
 {
 public:
-    msgDuer(std::string msg,Dictionary* pIns);
-    ~msgDuer() {}
+    msgDealer(std::string msg,Dictionary* pIns);
+    ~msgDealer() {}
 
     std::vector<std::string> getRecommandWords();
 

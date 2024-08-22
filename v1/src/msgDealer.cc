@@ -1,4 +1,4 @@
-#include "../include/msgDuer.h"
+#include "../include/msgDealer.h"
 
 using std::cout;
 using std::pair;
@@ -17,12 +17,12 @@ vector<string> splitEnACn(const string &page);
 
 
 
-msgDuer::msgDuer(string msg,Dictionary* pIns)
+msgDealer::msgDealer(string msg,Dictionary* pIns)
 : _msg(msg)
 , _pIns(pIns)
 {}
 
-void msgDuer::mergeSets(){
+void msgDealer::mergeSets(){
     vector<std::pair<string, int>> &dict = _pIns->getDict();
     map<string, set<int>> &index = _pIns->getIndex();
 
@@ -37,7 +37,7 @@ void msgDuer::mergeSets(){
     }
 }
 
-void msgDuer::buildComparer(){
+void msgDealer::buildComparer(){
     for(auto &ele:_rwSet){
         _dictComparer[ele.first]={editDistance(_msg,ele.first),ele.second};
     }
@@ -65,13 +65,13 @@ void msgDuer::buildComparer(){
 //     }
 // }
 
-void msgDuer::fillPQueue(){
+void msgDealer::fillPQueue(){
     for(auto &ele:_dictComparer){
         _pQueue.push({ele.first,{ele.second.first,ele.second.second}});
     }
 }
 
-vector<string> msgDuer::getRecommandWords(){
+vector<string> msgDealer::getRecommandWords(){
     mergeSets();
     buildComparer();
     fillPQueue();
