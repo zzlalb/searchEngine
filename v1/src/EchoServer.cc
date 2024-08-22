@@ -2,9 +2,9 @@
 #include "../include/EventLoop.h"
 #include "../include/TcpConnection.h"
 
-#include "../include/nlohmann/json.hpp"
 #include "../include/Dictionary.h"
-#include "../include/msgDuer.h"
+#include "../include/msgDealer.h"
+#include "../include/dealJson.h"
 
 #include <vector>
 #include <map>
@@ -30,8 +30,8 @@ void MyTask::process()
 {
     // 处理业务逻辑
     Dictionary *pIns = Dictionary::getInstance();
-    msgDuer msgduer(_msg,pIns);
-    vector<string> rws=msgduer.getRecommandWords();
+    msgDealer msgdealer(_msg,pIns);
+    vector<string> rws=msgdealer.getRecommandWords();
 
     /*test no prob*/
     // for(auto &ele:rws){
@@ -39,10 +39,11 @@ void MyTask::process()
     // }
     // cout<<"\n";
 
-    
+    dealJson dealjson(rws);
+    string return_msg=dealjson.returnmsgBuilder();
 
 
-    _con->sendInLoop(_msg);
+    _con->sendInLoop(return_msg);
 }
 
 EchoServer::EchoServer(size_t threadNum, size_t queSize, const string &ip, unsigned short port)
