@@ -34,10 +34,14 @@ void MyTask::process()
     vector<std::pair<string,int>> &dict=pIns->getDict();
     map<string,set<int>> &index=pIns->getIndex();
 
+    cout<<"here in MyTask::process\n";
+
     set<std::pair<string,int>> rwSet;
 
     vector<string> words;
     singleJieba::getpInstance()->getjieba().Cut(_msg,words,true);
+
+    cout<<"here in MyTask::process\n";
 
     for(auto &ele:words){
         for(auto & sets:index[ele]){
@@ -50,8 +54,6 @@ void MyTask::process()
     for(auto &ele:rwSet){
         cout<<ele.first<<" "<<ele.second<<"\n";
     }
-
-
 
     _con->sendInLoop(_msg);
 }
@@ -99,7 +101,8 @@ void EchoServer::onNewConnection(const TcpConnectionPtr &con)
 void EchoServer::onMessage(const TcpConnectionPtr &con)
 {
     //接收客户端的数据
-    string msg = con->receive();
+    //cout<<"in EchoServer::onMessage\n";//no pro
+    string msg = con->receive();//here problem find
     cout << ">>recv msg from client: " << msg << endl;
 
     MyTask task(msg, con);

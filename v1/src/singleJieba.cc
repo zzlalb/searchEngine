@@ -2,12 +2,6 @@
 
 singleJieba* singleJieba::_pInstance=nullptr;
 
-singleJieba::singleJieba()
-: _Jieba(DICT_PATH,HMM_PATH,USER_DICT_PATH,IDF_PATH,STOP_WORD_PATH)
-{
-
-}
-
 singleJieba* singleJieba::getpInstance(){
     if(nullptr==_pInstance){
         _pInstance=new singleJieba();
@@ -17,6 +11,6 @@ singleJieba* singleJieba::getpInstance(){
 }
 
 cppjieba::Jieba singleJieba::getjieba(){
-    return _Jieba;
+    return _jieba;
 }
 

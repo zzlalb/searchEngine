@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <iostream>
 
 SocketIO::SocketIO(int fd)
 : _fd(fd)
@@ -58,7 +59,9 @@ int SocketIO::readLine(char *buf, int len)
     while(left > 0)
     {
         //MSG_PEEK不会将缓冲区中的数据进行清空,只会进行拷贝操作
+        //std::cout<<"here in SocketIO::readLine\n";
         ret = recv(_fd, pstr, left, MSG_PEEK);
+        //std::cout<<"ret: "<<ret<<"\n";
         if(-1 == ret && errno == EINTR)
         {
             continue;
@@ -92,6 +95,7 @@ int SocketIO::readLine(char *buf, int len)
             pstr += ret;
             left -= ret;
         }
+
     }
     *pstr = '\0';
 

@@ -83,14 +83,15 @@ void EventLoop::waitEpollFd()
             }
             else if(fd == _evtfd)//用于通信的文件描述符就绪
             {
-                cout<<"here in EventLoop::waitEpollFd()\n";
                 handleRead();
+
                 //需要做"任务"
                 //遍历vector
                 doPengdingFunctors();
             }
             else
             {
+                //cout<<"hello\n"; no pro
                 handleMessage(fd);//处理老的连接
             }
         }

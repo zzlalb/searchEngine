@@ -51,6 +51,8 @@ string TcpConnection::receive()
 {
     char buff[65535] = {0};
     _sockIO.readLine(buff, sizeof(buff));
+    /*for test*/
+    //cout<<"buf: "<<buff<<"\n";
 
     return string(buff);
 }
