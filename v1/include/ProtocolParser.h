@@ -11,7 +11,10 @@ public:
 
     int judgeService();
 
+    std::string getNewmsg();
+
 private:
     std::string _msg;
+    std::string _newmsg;
 };
 

@@ -65,7 +65,9 @@ int main()
 
                 nlohmann::json json_object;
 
-                json_object["query"]=tmp;
+                json_object.push_back("query");
+                json_object.push_back(tmp);
+
                 int len=strlen(json_object.dump().c_str());
 
                 //little train protocol
@@ -79,11 +81,9 @@ int main()
                 printf("first send %d bytes.\n", ret);
                 ret = send(clientfd, tmp, len, 0);
                 printf("second send %d bytes.\n", ret);
+            }else if(buff[0]=='s'){
+                
             }
-
-            
-            
-
             
         }
 

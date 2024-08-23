@@ -35,9 +35,10 @@ void MyTask::process()
     // 1.first judge which service
     cout<<_msg<<"\n";
     cout<<_msg.size()<<"\n";
-    
+
     ProtocolParser protocolparser(_msg);
     int whichService=protocolparser.judgeService();
+    _msg=protocolparser.getNewmsg();
 
     if(whichService==QUERY){
         Dictionary *pIns = Dictionary::getInstance();

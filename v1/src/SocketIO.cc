@@ -50,12 +50,12 @@ int SocketIO::readn(char *buf, int len)
     return len - left;
 }
 
-int SocketIO::myread(char *buf,int &num, int len){
+int SocketIO::myread(char *buf, int len){
     int ret1=0,ret2=0;
-
+    int num=0;
     ret1 = read(_fd, &num, sizeof(int));
 
-    ret2=read(_fd,buf,len);
+    ret2=read(_fd,buf,num);
 
     return ret1+ret2;
 }
