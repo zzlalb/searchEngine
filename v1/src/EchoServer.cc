@@ -5,6 +5,7 @@
 #include "../include/Dictionary.h"
 #include "../include/msgDealer.h"
 #include "../include/dealJson.h"
+#include "../include/ProtocolParser.h"
 
 #include <vector>
 #include <map>
@@ -12,6 +13,9 @@
 #include <string>
 #include <iostream>
 #include <functional>
+
+#define QUERY 1
+#define SEARCH 2
 
 using std::bind;
 using std::cout;
@@ -21,29 +25,43 @@ using std::set;
 using std::string;
 using std::vector;
 
-
 MyTask::MyTask(const string &msg, const TcpConnectionPtr &con)
 : _msg(msg), _con(con)
 {
 }
 void MyTask::process()
 {
-    // 处理业务逻辑
-    Dictionary *pIns = Dictionary::getInstance();
-    msgDealer msgdealer(_msg,pIns);
-    vector<string> rws=msgdealer.getRecommandWords();
+    // deal with service
+    // 1.first judge which service
+    cout<<_msg<<"\n";
+    cout<<_msg.size()<<"\n";
+    
+    ProtocolParser protocolparser(_msg);
+    int whichService=protocolparser.judgeService();
 
-    /*test no prob*/
-    // for(auto &ele:rws){
-    //     cout<<ele<<" ";
-    // }
-    // cout<<"\n";
+    if(whichService==QUERY){
+        Dictionary *pIns = Dictionary::getInstance();
+        msgDealer msgdealer(_msg,pIns);
+        vector<string> rws=msgdealer.getRecommandWords();
 
-    dealJson dealjson(rws);
-    string return_msg=dealjson.returnmsgBuilder();
+        /*test no prob*/
+        // for(auto &ele:rws){
+        //     cout<<ele<<" ";
+        // }
+        // cout<<"\n";
 
+        dealJson dealjson(rws);
+        string return_msg=dealjson.returnmsgBuilder();
 
-    _con->sendInLoop(return_msg);
+        _con->sendInLoop(return_msg);
+
+    }else if(whichService==SEARCH){
+
+        _con->sendInLoop(_msg);
+    }else{
+        _con->sendInLoop("error type\n");
+    }
+    
 }
 
 EchoServer::EchoServer(size_t threadNum, size_t queSize, const string &ip, unsigned short port)

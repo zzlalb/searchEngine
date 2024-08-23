@@ -50,11 +50,12 @@ void TcpConnection::sendInLoop(const string &msg)
 string TcpConnection::receive()
 {
     char buff[65535] = {0};
-    _sockIO.readLine(buff, sizeof(buff));
+    int num=0;
+    _sockIO.myread(buff, num,sizeof(buff));
     /*for test*/
     //cout<<"buf: "<<buff<<"\n";
 
-    return string(buff);
+    return std::to_string(num)+string(buff);
 }
 
 //查看连接是否断开
