@@ -17,6 +17,7 @@ int ProtocolParser::judgeService(){
         _newmsg=json_object[1];
         return 1;
     }else if(json_object[0]=="search"){
+        _newmsg=json_object[1];
         return 2;
     }
 

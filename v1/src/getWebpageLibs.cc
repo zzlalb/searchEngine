@@ -10,10 +10,10 @@ getWebpageLibs* getWebpageLibs::getInstance(){
     return _pIns;
 }
 
-std::unordered_map<std::string,std::set<std::pair<int,double>>> getWebpageLibs::getInvertlib(){
+std::unordered_map<std::string,std::set<std::pair<int,double>>> &getWebpageLibs::getInvertlib(){
     return _invertLib;
 }
 
-std::unordered_map<int,std::pair<int,int>> getWebpageLibs::getOffsetlib(){
+std::unordered_map<int,std::pair<int,int>> &getWebpageLibs::getOffsetlib(){
     return _offsetLib;
 }

@@ -1,12 +1,18 @@
 #include "../include/msgDealer.h"
+#include "../include/SplitToolCppJieba.h"
+#include <fstream>
+#include <math.h>
+#include <unordered_map>
 
 using std::cout;
 using std::pair;
+using std::unordered_map;
 using std::priority_queue;
 using std::map;
 using std::set;
 using std::string;
 using std::vector;
+using std::ifstream;
 
 size_t nBytesCode(const char ch);
 //2. 求取一个字符串的字符长度
@@ -17,9 +23,10 @@ vector<string> splitEnACn(const string &page);
 
 
 
-msgDealer::msgDealer(string msg,Dictionary* pIns)
+msgDealer::msgDealer(string msg,Dictionary* pIns,getWebpageLibs* pInsWeb)
 : _msg(msg)
 , _pIns(pIns)
+, _pInsWebpage(pInsWeb)
 {}
 
 void msgDealer::mergeSets(){
@@ -86,6 +93,121 @@ vector<string> msgDealer::getRecommandWords(){
     }
 
     return words;
+}
+
+//new is to deal with webpage lib
+
+void msgDealer::getIntersection(){
+    SplitToolCppJieba jieba;
+    _words=jieba.cut(_msg);
+
+    //cout<<"test1\n";
+    for(auto &pairs:_pInsWebpage->getInvertlib()[_words[0]]){//here,words[0] must not be english words!!!
+        //cout<<pairs.first<<" ";
+        _intersection.insert(pairs.first);
+    }
+    //cout<<"test1\n";
+
+    set<int> tmp=_intersection;
+    for(int i=1;i<_words.size();++i){
+        set<int> comparer;//存当前单词的集合
+        for(auto &ele:_pInsWebpage->getInvertlib()[_words[i]]){
+            comparer.insert(ele.first);
+        }
+
+        /*allright dont search strange words*/
+        // cout<<"test2\n";
+        // for(auto &ele:comparer){
+        //     cout<<ele<<" ";
+        // }
+        // cout<<"\n";
+
+        for(auto &ele:tmp){
+            if(comparer.find(ele)==comparer.end()){
+                _intersection.erase(ele);
+            }
+        }
+
+        tmp=_intersection;
+    }
+
+    /*allright dont search strange words*/
+    // cout<<"test3\n";
+    // for(auto &ele:_intersection){
+    //     cout<<ele<<"\n";
+    // }   
+}
+
+void msgDealer::calculateCos(){
+    vector<double> baseVec;
+
+    for(int i=0;i<_words.size();++i){
+        int tf=1;
+        for(int j=i+1;j<_words.size();++j){
+            if(_words[i]==_words[j]){
+                tf++;
+            }
+        }
+
+        int df=1;
+        double idf=log2(1.0/(df+1));
+        double w=tf*idf;
+        baseVec.push_back(w);
+    }
+
+    for(auto &ele:_intersection){
+        vector<double> peerVec;
+        for(int i=0;i<_words.size();++i){
+            for(auto &pairs:_pInsWebpage->getInvertlib()[_words[i]]){
+                if(ele==pairs.first){
+                    peerVec.push_back(pairs.second);
+                }
+            }
+        }
+
+        double plusW=0;
+        double SumofSquaresA=0;
+        double SumofSquaresB=0;
+
+        for(int i=0;i<_words.size();++i){
+            plusW+=baseVec[i]*peerVec[i];
+            SumofSquaresA+=baseVec[i]*baseVec[i];
+            SumofSquaresB+=peerVec[i]*peerVec[i];
+        }
+
+        double cos=plusW/(sqrt(SumofSquaresA)*sqrt(SumofSquaresB));
+        _pQueue2.push({ele,cos});
+    }
+}
+
+vector<string> msgDealer::getRecommandWebPages(){
+    getIntersection();
+    cout<<"test1\n";
+    calculateCos();
+    cout<<"test2\n";
+    int n=10;
+    vector<string> pages;
+
+    ifstream ifs;
+    ifs.open("../data/newripepage.dat");
+
+    while(!_pQueue2.empty()&&n>0){
+        int docId=_pQueue2.top().first;
+        int pos=_pInsWebpage->getOffsetlib()[docId].first;
+        int len=_pInsWebpage->getOffsetlib()[docId].second;
+
+        ifs.seekg(pos);
+
+        char buf[len+1];
+        memset(buf,0,len+1);
+
+        ifs.read(buf,len);
+        pages.push_back(buf);
+        n--;
+    }
+    
+    ifs.close();
+    return pages;
 }
 
 size_t nBytesCode(const char ch){

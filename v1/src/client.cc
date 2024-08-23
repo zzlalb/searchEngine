@@ -81,8 +81,31 @@ int main()
                 printf("first send %d bytes.\n", ret);
                 ret = send(clientfd, tmp, len, 0);
                 printf("second send %d bytes.\n", ret);
+
             }else if(buff[0]=='s'){
-                
+                char tmp[10000] = {0};
+                for(int i=0;i<strlen(buff)-2;++i){
+                    tmp[i]=buff[i+1];
+                }
+
+                nlohmann::json json_object;
+
+                json_object.push_back("search");
+                json_object.push_back(tmp);
+
+                int len=strlen(json_object.dump().c_str());
+
+                //little train protocol
+                memset(tmp,0,sizeof(tmp));
+                strcpy(tmp,json_object.dump().c_str());
+
+                cout<<tmp[strlen(tmp)-1]<<"\n";
+
+                cout<<tmp<<"\n";
+                ret = send(clientfd, &len, sizeof(len), 0);
+                printf("first send %d bytes.\n", ret);
+                ret = send(clientfd, tmp, len, 0);
+                printf("second send %d bytes.\n", ret);
             }
             
         }

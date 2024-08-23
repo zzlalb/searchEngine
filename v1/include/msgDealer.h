@@ -1,5 +1,6 @@
 #pragma once
 #include "./Dictionary.h"
+#include "./getWebpageLibs.h"
 
 #include <queue>
 #include <vector>
@@ -33,20 +34,35 @@ struct cmp{
     }
 };
 
+struct cmp2{
+    bool operator()(pair<int,double>&lhs,pair<int,double>& rhs){
+        if(lhs.second<rhs.second){
+            return false;
+        }else if(lhs.second==rhs.second){
+            return lhs.first<rhs.first;
+        }else{
+            return true;
+        }
+    }
+};
 
 class msgDealer
 {
 public:
-    msgDealer(std::string msg,Dictionary* pIns);
+    msgDealer(std::string msg,Dictionary* pIns,getWebpageLibs* pInsweb);
     ~msgDealer() {}
 
     std::vector<std::string> getRecommandWords();
+
+    vector<string> getRecommandWebPages();
 
 private:
     void mergeSets();
     void buildComparer();
     void fillPQueue();
 
+    void getIntersection();
+    void calculateCos();
 private:
 
     std::string _msg;
@@ -54,5 +70,10 @@ private:
     std::set<std::pair<std::string, int>> _rwSet;
     std::map<std::string,std::pair<int,int>> _dictComparer;
     std::priority_queue<pair<string,pair<int,int>>,vector<pair<string,pair<int,int>>>,cmp> _pQueue;
+
+    getWebpageLibs* _pInsWebpage;
+    std::set<int> _intersection;
+    vector<string> _words;
+    std::priority_queue<pair<int,double>,vector<pair<int,double>>,cmp2> _pQueue2;
 };
 

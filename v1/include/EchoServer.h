@@ -24,8 +24,6 @@ private:
 class EchoServer
 {
 public:
-    friend class MyTask;
-public:
     EchoServer(size_t threadNum, size_t queSize
                , const string &ip
                , unsigned short port);

@@ -41,9 +41,10 @@ void MyTask::process()
     int whichService=protocolparser.judgeService();
     _msg=protocolparser.getNewmsg();
 
+    cout<<_msg<<"\n";
+
     if(whichService==QUERY){
-        Dictionary *pIns = Dictionary::getInstance();
-        msgDealer msgdealer(_msg,_pInsdic);
+        msgDealer msgdealer(_msg,_pInsdic,_pInswebpage);
         vector<string> rws=msgdealer.getRecommandWords();
 
         /*test no prob*/
@@ -58,8 +59,17 @@ void MyTask::process()
         _con->sendInLoop(return_msg);
 
     }else if(whichService==SEARCH){
+        msgDealer msgdealer(_msg,_pInsdic,_pInswebpage);
 
-        _con->sendInLoop(_msg);
+        //msgdealer.getIntersection();//for test
+
+        vector<string> pages=msgdealer.getRecommandWebPages();
+
+        dealJson dealjson(pages);
+
+        string return_msg=dealjson.returnmsgBuilder();
+
+        _con->sendInLoop(return_msg);
     }else{
         _con->sendInLoop("error type\n");
     }
@@ -69,6 +79,10 @@ void MyTask::process()
 EchoServer::EchoServer(size_t threadNum, size_t queSize, const string &ip, unsigned short port)
     : _pool(threadNum, queSize), _server(ip, port)
 {
+        _pInsdic=Dictionary::getInstance();
+        _pInswebpage=getWebpageLibs::getInstance();
+
+        std::cout<<_pInswebpage->getOffsetlib()[1].first;
 }
 
 EchoServer::~EchoServer()
@@ -77,9 +91,6 @@ EchoServer::~EchoServer()
 
 // 服务器的启动与停止
 void EchoServer::start(){
-    _pInsdic=Dictionary::getInstance();
-    _pInswebpage=getWebpageLibs::getInstance();
-
     _pool.start();
 
     // 注册所有的回调

@@ -35,6 +35,7 @@ private:
                 iss>>size;
 
                 _offsetLib[docid]={pos,size};
+                //cout<<docid<<" "<<pos<<" "<<size<<"\n";
             }
         }else{
             cout<<"open file1 error in getWebpageLibs\n";
@@ -63,6 +64,7 @@ private:
                 }   
 
                 _invertLib[word]=tmpset;
+                //cout<<word<<" ";
             }
         }else{
             cout<<"open file2 error in getWebpageLibs\n";
@@ -76,8 +78,8 @@ private:
 
 public:
     static getWebpageLibs* getInstance();
-    std::unordered_map<std::string,std::set<std::pair<int,double>>> getInvertlib();
-    std::unordered_map<int,std::pair<int,int>> getOffsetlib();
+    std::unordered_map<std::string,std::set<std::pair<int,double>>> &getInvertlib();
+    std::unordered_map<int,std::pair<int,int>> &getOffsetlib();
 
 private:
     static getWebpageLibs* _pIns;
