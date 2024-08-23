@@ -4,19 +4,27 @@
 #include "ThreadPool.h"
 #include "TcpServer.h"
 
+#include "getWebpageLibs.h"
+#include "Dictionary.h"
+
 class MyTask
 {
 public:
-    MyTask(const string &msg, const TcpConnectionPtr &con);
+    MyTask(const string &msg, const TcpConnectionPtr &con,Dictionary* pInsdic,getWebpageLibs* pInswebpage);
     void process();
 
 private:
     string _msg;
     TcpConnectionPtr _con;
+
+    Dictionary* _pInsdic;
+    getWebpageLibs* _pInswebpage;
 };
 
 class EchoServer
 {
+public:
+    friend class MyTask;
 public:
     EchoServer(size_t threadNum, size_t queSize
                , const string &ip
@@ -34,6 +42,8 @@ public:
 private:
     ThreadPool _pool;
     TcpServer _server;
+    Dictionary* _pInsdic;
+    getWebpageLibs* _pInswebpage;
 
 };
 

@@ -2,7 +2,6 @@
 #include "../include/EventLoop.h"
 #include "../include/TcpConnection.h"
 
-#include "../include/Dictionary.h"
 #include "../include/msgDealer.h"
 #include "../include/dealJson.h"
 #include "../include/ProtocolParser.h"
@@ -25,9 +24,11 @@ using std::set;
 using std::string;
 using std::vector;
 
-MyTask::MyTask(const string &msg, const TcpConnectionPtr &con)
+MyTask::MyTask(const string &msg, const TcpConnectionPtr &con,Dictionary* pInsdic,getWebpageLibs* pInswebpage)
 : _msg(msg), _con(con)
 {
+    _pInsdic=pInsdic;
+    _pInswebpage=pInswebpage;
 }
 void MyTask::process()
 {
@@ -42,7 +43,7 @@ void MyTask::process()
 
     if(whichService==QUERY){
         Dictionary *pIns = Dictionary::getInstance();
-        msgDealer msgdealer(_msg,pIns);
+        msgDealer msgdealer(_msg,_pInsdic);
         vector<string> rws=msgdealer.getRecommandWords();
 
         /*test no prob*/
@@ -76,6 +77,9 @@ EchoServer::~EchoServer()
 
 // 服务器的启动与停止
 void EchoServer::start(){
+    _pInsdic=Dictionary::getInstance();
+    _pInswebpage=getWebpageLibs::getInstance();
+
     _pool.start();
 
     // 注册所有的回调
@@ -100,7 +104,7 @@ void EchoServer::onMessage(const TcpConnectionPtr &con){
     string msg = con->receive(); // here problem find
     cout << ">>recv msg from client: " << msg << endl;
 
-    MyTask task(msg, con);
+    MyTask task(msg, con,_pInsdic,_pInswebpage);
 
     _pool.addTask(std::bind(&MyTask::process, task));
 }
