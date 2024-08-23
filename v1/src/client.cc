@@ -32,7 +32,7 @@ int main()
 
     fd_set rdset;
     FD_ZERO(&rdset);
-    char buff[10000] = {0};
+    char buff[65535] = {0};
 
     //对IO事件进行监听
     while(1) {
@@ -111,15 +111,20 @@ int main()
         }
 
         if(FD_ISSET(clientfd, &rdset)) {
-            //清空缓冲区
-            memset(buff, 0, sizeof(buff));
-            //从对端获取数据
-            int ret = recv(clientfd, buff, sizeof(buff), 0);
-            if(ret == 0) {
-                //连接已经断开了
-                break;
-            }
-            printf("recv msg: %s\n", buff);
+            int ret=1;
+            //while(ret!=0){
+                memset(buff, 0, sizeof(buff));
+                //从对端获取数据
+                ret = recv(clientfd, buff, sizeof(buff), 0);
+                if(ret == 0) {
+                    //连接已经断开了
+                     break;
+                }
+
+                nlohmann::json json_object = nlohmann::json::parse(buff);
+                cout<<json_object[1].dump()<<"\n";
+            //}
+           
         }
     }
     printf("byebye.\n");

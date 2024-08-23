@@ -182,9 +182,9 @@ void msgDealer::calculateCos(){
 
 vector<string> msgDealer::getRecommandWebPages(){
     getIntersection();
-    cout<<"test1\n";
+
     calculateCos();
-    cout<<"test2\n";
+
     int n=10;
     vector<string> pages;
 
@@ -203,9 +203,11 @@ vector<string> msgDealer::getRecommandWebPages(){
 
         ifs.read(buf,len);
         pages.push_back(buf);
+
+        _pQueue2.pop();
         n--;
     }
-    
+
     ifs.close();
     return pages;
 }

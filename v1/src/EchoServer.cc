@@ -12,6 +12,7 @@
 #include <string>
 #include <iostream>
 #include <functional>
+#include <unistd.h>
 
 #define QUERY 1
 #define SEARCH 2
@@ -53,7 +54,7 @@ void MyTask::process()
         // }
         // cout<<"\n";
 
-        dealJson dealjson(rws);
+        dealJson dealjson(rws,whichService);
         string return_msg=dealjson.returnmsgBuilder();
 
         _con->sendInLoop(return_msg);
@@ -65,11 +66,22 @@ void MyTask::process()
 
         vector<string> pages=msgdealer.getRecommandWebPages();
 
-        dealJson dealjson(pages);
+        for(auto &ele:pages){
+            dealJson dealjson2(ele,whichService);
 
-        string return_msg=dealjson.returnmsgBuilder();
+            string return_msg=dealjson2.returnPages();
 
-        _con->sendInLoop(return_msg);
+            // int len=return_msg.size();
+            // cout<<"len: "<<len<<"\n";
+
+            // _con.
+            // _con->sendInLoop(std::to_string(len));
+
+            _con->sendInLoop(return_msg);
+            sleep(1);
+        }
+
+        
     }else{
         _con->sendInLoop("error type\n");
     }
