@@ -74,13 +74,13 @@ int main()
                 memset(tmp,0,sizeof(tmp));
                 strcpy(tmp,json_object.dump().c_str());
 
-                cout<<tmp[strlen(tmp)-1]<<"\n";
+                //cout<<tmp[strlen(tmp)-1]<<"\n";
 
-                cout<<tmp<<"\n";
+                //cout<<tmp<<"\n";
                 ret = send(clientfd, &len, sizeof(len), 0);
-                printf("first send %d bytes.\n", ret);
+                //printf("first send %d bytes.\n", ret);
                 ret = send(clientfd, tmp, len, 0);
-                printf("second send %d bytes.\n", ret);
+                //printf("second send %d bytes.\n", ret);
 
             }else if(buff[0]=='s'){
                 char tmp[10000] = {0};
@@ -122,7 +122,10 @@ int main()
                 }
 
                 nlohmann::json json_object = nlohmann::json::parse(buff);
-                cout<<json_object[1].dump()<<"\n";
+                for(int i=0;i<json_object.size();++i){
+                    cout<<json_object[i].dump()<<"\n";
+                }
+                
             //}
            
         }

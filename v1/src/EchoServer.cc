@@ -56,6 +56,7 @@ void MyTask::process()
 
         dealJson dealjson(rws,whichService);
         string return_msg=dealjson.returnmsgBuilder();
+        cout<<"retrunmsg: "<<return_msg<<"\n";
 
         _con->sendInLoop(return_msg);
 
